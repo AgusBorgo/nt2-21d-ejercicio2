@@ -16,6 +16,8 @@
         <input type="text" class="form-control" v-model="criterioDeBusquedaDni"
             placeholder="Busqueda por dni">
         <br>
+        
+
         <div class="card-deck m-0">
             <div class="row">
                 <div class="col" v-for="persona in personasFiltradas">
@@ -29,6 +31,10 @@
                 </div>
             </div>
         </div>
+
+        <div v-if="advertenciaFiltro" class="alert alert-warning" role="alert">
+            El criterio de búsqueda debe tener al menos 3 caracteres.
+
     </div>
         
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -77,13 +83,29 @@
       let nombreCompleto = `${persona.nombre} ${persona.apellido}`.toLowerCase()
       let dniPersona = persona.dni.toLowerCase()
 
+    let nombreValido = nombre.length >= 3
+    let dniValido = dni.length >= 3
+    
+    if (!nombreValido && !dniValido) return false
+
+
       if (!nombre && !dni) return false
       return (
         (!nombre || nombreCompleto.includes(nombre)) &&
         (!dni || dniPersona.includes(dni))
       )
     })
+  },
+
+  advertenciaFiltro(){
+    let nombre = this.criterioDeBusquedaNombreApellido.trim().toLowerCase()
+    let dni = this.criterioDeBusquedaDni.trim().toLowerCase()
+    return(
+        (nombre.length < 3) ||
+        (dni.length < 3)
+    )
   }
+
 },
             methods: {
                 getNombreCompleto(persona) {
