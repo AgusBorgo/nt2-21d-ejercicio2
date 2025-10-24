@@ -69,18 +69,22 @@
                 }
             },
             computed: {
-                personasFiltradas() {
-                    return this.personas.filter((persona) => {
-                        let registroNombreApellido = `${persona.nombre} ${persona.apellido}`
-                        let registroDni = `${persona.dni}`
-                        let cumpleCriterioNombreApellido = this.criterioDeBusquedaNombreApellido === '' ||
-                            registroNombreApellido.toLowerCase().includes(this.criterioDeBusquedaNombreApellido.toLowerCase())
-                        let cumpleCriterioDni = this.criterioDeBusquedaDni === '' ||
-                            registroDni.toLowerCase().includes(this.criterioDeBusquedaDni.toLowerCase())
-                        return cumpleCriterioNombreApellido && cumpleCriterioDni    
-                    });
-                }
-            },
+  personasFiltradas() {
+    let nombre = this.criterioDeBusquedaNombreApellido.trim().toLowerCase()
+    let dni = this.criterioDeBusquedaDni.trim().toLowerCase()
+
+    return this.personas.filter((persona) => {
+      let nombreCompleto = `${persona.nombre} ${persona.apellido}`.toLowerCase()
+      let dniPersona = persona.dni.toLowerCase()
+
+      if (!nombre && !dni) return false
+      return (
+        (!nombre || nombreCompleto.includes(nombre)) &&
+        (!dni || dniPersona.includes(dni))
+      )
+    })
+  }
+},
             methods: {
                 getNombreCompleto(persona) {
                     return `${persona.nombre} ${persona.apellido}`
